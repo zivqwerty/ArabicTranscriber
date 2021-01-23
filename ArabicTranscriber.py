@@ -36,7 +36,7 @@ arabic_to_hebrew = {
     "ؤ": "או",
     "ي": "י",
     "ئ": "אי",
-    "ى": "ת",
+    "ى": "א",
     "ء": "א'",
 
     "١": "1",
@@ -66,17 +66,21 @@ arabic_to_hebrew = {
 
 }
 
-vowels = {
-    str(chr(0x64E)): "◌ַ",
-    str(chr(0x650)): "◌ִ",
-    str(chr(0x64F)): "◌ֻ",
-    str(chr(0x652)): "◌ְ",
-    str(chr(0x651)): "◌ּ",
+punctuation = (
+    "؟", "?", "،", ",", ".", ".", " ", ")", "(", "+", "-", "!",
+)
 
-    str(chr(0x64B)): "◌ַן",
-    str(chr(0x64D)): "◌ִן",
-    str(chr(0x64C)): "◌ֻן",
-}
+vowels = (
+    str(chr(0x64E)),
+    str(chr(0x650)),
+    str(chr(0x64F)),
+    str(chr(0x652)),
+    str(chr(0x651)),
+
+    str(chr(0x64B)),
+    str(chr(0x64D)),
+    str(chr(0x64C)),
+)
 
 
 ending_letters = {
@@ -85,6 +89,7 @@ ending_letters = {
     "ف": "ף",
     "ص": "ץ",
     "ض": "ץ'",
+
 }
 
 arabic_string = input("Enter Arabic string: ")
@@ -101,13 +106,21 @@ for character in arabic_string:
 
     else:
 
-        if character == "ة":
+        if character == str(chr(0x64B)):
+            hebrew_string += arabic_to_hebrew[character]
+            skip = 1
+
+        elif character == "ة":
             if counter < len(arabic_string) - 4:
                 if arabic_string[counter+1:counter+4] == " ال" or arabic_string[counter+1] in vowels:
                     hebrew_string += "ת"
+                else:
+                    hebrew_string += arabic_to_hebrew[character]
             elif counter < len(arabic_string) - 1:
                 if arabic_string[counter+1] in vowels:
                     hebrew_string += "ת"
+            else:
+                hebrew_string += arabic_to_hebrew[character]
 
         elif character == "ﹸ":
             if counter < len(arabic_string)-2:
@@ -129,7 +142,7 @@ for character in arabic_string:
                 else:
                     hebrew_string += character
             else:
-                if arabic_string[counter + 1] == " " and character in ending_letters:
+                if arabic_string[counter + 1] in punctuation and character in ending_letters:
                     hebrew_string += ending_letters[character]
                 elif character in arabic_to_hebrew:
                     hebrew_string += arabic_to_hebrew[character]
