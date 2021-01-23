@@ -53,7 +53,31 @@ arabic_to_hebrew = {
     "؟": "?",
     "،": ",",
     ".": ".",
+
+    str(chr(0x64E)): "◌ַ",
+    str(chr(0x650)): "◌ִ",
+    str(chr(0x64F)): "◌ֻ",
+    str(chr(0x652)): "◌ְ",
+    str(chr(0x651)): "◌ּ",
+
+    str(chr(0x64B)): "◌ַן",
+    str(chr(0x64D)): "◌ִן",
+    str(chr(0x64C)): "◌ֻן",
+
 }
+
+vowels = {
+    str(chr(0x64E)): "◌ַ",
+    str(chr(0x650)): "◌ִ",
+    str(chr(0x64F)): "◌ֻ",
+    str(chr(0x652)): "◌ְ",
+    str(chr(0x651)): "◌ּ",
+
+    str(chr(0x64B)): "◌ַן",
+    str(chr(0x64D)): "◌ִן",
+    str(chr(0x64C)): "◌ֻן",
+}
+
 
 ending_letters = {
     "م": "ם",
@@ -63,26 +87,55 @@ ending_letters = {
     "ض": "ץ'",
 }
 
-input = input("Enter Arabic string: ")
-output = ""
+arabic_string = input("Enter Arabic string: ")
+hebrew_string = ""
 counter = 0
+skip = 0
 
-for letter in input:
+for character in arabic_string:
 
-    if counter == len(input)-1:
-        if letter in ending_letters:
-            output += ending_letters[letter]
-        elif letter in arabic_to_hebrew:
-            output += arabic_to_hebrew[letter]
-        else:
-            output += letter
-    elif input[counter+1] == " " and letter in ending_letters:
-        output += ending_letters[letter]
-    elif letter in arabic_to_hebrew:
-        output += arabic_to_hebrew[letter]
+    # print(hex(ord(character)))
+
+    if skip > 0:
+        skip -= 1
+
     else:
-        output += letter
+
+        if character == "ة":
+            if counter < len(arabic_string) - 4:
+                if arabic_string[counter+1:counter+4] == " ال" or arabic_string[counter+1] in vowels:
+                    hebrew_string += "ת"
+            elif counter < len(arabic_string) - 1:
+                if arabic_string[counter+1] in vowels:
+                    hebrew_string += "ת"
+
+        elif character == "ﹸ":
+            if counter < len(arabic_string)-2:
+                if arabic_string[counter + 1] == "و" and not arabic_string[counter + 2] in vowels:
+                    hebrew_string += "וּ"
+                    skip += 1
+            elif counter == len(arabic_string)-2 and arabic_string[counter + 1] == "و":
+                hebrew_string += "וּ"
+                skip += 1
+            else:
+                hebrew_string += arabic_to_hebrew[character]
+
+        else:
+            if counter == len(arabic_string)-1:
+                if character in ending_letters:
+                    hebrew_string += ending_letters[character]
+                elif character in arabic_to_hebrew:
+                    hebrew_string += arabic_to_hebrew[character]
+                else:
+                    hebrew_string += character
+            else:
+                if arabic_string[counter + 1] == " " and character in ending_letters:
+                    hebrew_string += ending_letters[character]
+                elif character in arabic_to_hebrew:
+                    hebrew_string += arabic_to_hebrew[character]
+                else:
+                    hebrew_string += character
 
     counter += 1
 
-print("Hebrew tarnscription: " + output)
+print("Hebrew tarnscription: " + hebrew_string)
