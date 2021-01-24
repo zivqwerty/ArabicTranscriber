@@ -152,3 +152,4 @@ for character in arabic_string:
     counter += 1
 
 print("Hebrew tarnscription: " + hebrew_string)
+

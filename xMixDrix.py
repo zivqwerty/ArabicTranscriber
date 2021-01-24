@@ -4,6 +4,6 @@ board = [
     [" ", " ", " "]
 ]
 
-def print_board():
-    for row in board:
-        line = " | | "
+string = "abcd"
+
+print(string[0:0])

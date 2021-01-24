@@ -52,29 +52,15 @@ class Calculation:
 
                     index_counter -= 1
 
+                inside_brackets = self.code[opening_bracket_index+1:closing_bracket_index]
                 if closing_bracket_index < len(self.code)-1:
-                    if self.code[closing_bracket_index+1] in operations:
-
-                        operation_index = opening_bracket_index+1
-
-                        self.left = Calculation(self.code[opening_bracket_index+1:closing_bracket_index])
-                        self.right = Calculation(self.code[operation_index + 1:])
-                        self.operation = self.code[operation_index]
-                    else:
-                        raise Exception("Invalid syntax")
+                    self.code = self.code[0:opening_bracket_index] + str(Calculation(inside_brackets).get_value()) + self.code[closing_bracket_index+1:]
                 else:
-                    if self.code[opening_bracket_index - 1] in operations:
+                    self.code = self.code[0:opening_bracket_index] + str(Calculation(inside_brackets).get_value())
 
-                        operation_index = opening_bracket_index - 1
+                return
 
-                        self.left = Calculation(self.code[0:operation_index])
-                        self.right = Calculation(self.code[opening_bracket_index + 1:closing_bracket_index])
-                        self.operation = self.code[operation_index]
-
-                    else:
-                        raise Exception("Invalid syntax")
-
-            if "+" in self.code or "-" in self.code:
+            elif "+" in self.code or "-" in self.code:
                 if "+" not in self.code:
                     operation_index = self.code.rindex("-")
                 elif "-" not in self.code:
