@@ -58,9 +58,7 @@ class Calculation:
                 else:
                     self.code = self.code[0:opening_bracket_index] + str(Calculation(inside_brackets).get_value())
 
-                return
-
-            elif "+" in self.code or "-" in self.code:
+            if "+" in self.code or "-" in self.code:
                 if "+" not in self.code:
                     operation_index = self.code.rindex("-")
                 elif "-" not in self.code:
